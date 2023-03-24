@@ -294,6 +294,9 @@ while vidaJugador:
                 jugador.puntos+=2
                 jugador.BanderaImpacto=False
                 jugador.BanderaBala=False
+                #si hubo colision de la bala el jugador no debería estar disparando
+                #esto evitaría que salgan muchas balas en ráfaga al colisionar la bala
+                jugador.disparo=False
 
 
         if jugador.puntos>=80 and nivelMarcador==1:

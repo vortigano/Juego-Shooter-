@@ -18,7 +18,10 @@ class Jugador():
         self.inicial=True
         self.coordXBalaInicial=self.posX
         self.disparo=False
-
+        
+        self.tecla_disparo=False
+        
+        
     def setearJugador(self,nombre,seleccion):
         self.nombre=nombre 
         self.seleccion=seleccion
@@ -41,36 +44,26 @@ class Jugador():
 
     def moverJugador(self, event, pantalla):
 
-        if self.BanderaBala==False:
-            self.coordYBala=635
-            self.coordXBalaInicial=self.posX+48
-            self.BanderaBala=True
-            self.BanderaImpacto=True
-        
         if self.coordYBala<-1:
             self.BanderaBala=False
-    
-
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT and self.posX > 10:
-                self.posX+=-self.velocidadMovimiento
-            if event.key == pygame.K_RIGHT and self.posX < 662:
-                self.posX+=self.velocidadMovimiento
-
-
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE:
-                self.disparo=True
-                self.coordXBalaInicial=self.posX+48
-
-
+            
+        # alternativa para evitar bloqueo de teclado y que se pierdan pulsaciones
+        if self.tecla_disparo == False and pygame.key.get_pressed()[pygame.K_SPACE] == True and self.disparo==False:
+            self.tecla_disparo = True
+            self.disparo=True
+            self.coordXBalaInicial=self.posX+48
+        if self.tecla_disparo == True and pygame.key.get_pressed()[pygame.K_SPACE] == False:
+            self.tecla_disparo = False
+            
+        if pygame.key.get_pressed()[pygame.K_LEFT] == True and self.posX > 10:
+            self.posX+=-self.velocidadMovimiento
+        if pygame.key.get_pressed()[pygame.K_RIGHT] == True and self.posX < 662:
+            self.posX+=self.velocidadMovimiento
+        
         if self.disparo:
-            if self.coordYBala>-1 and self.BanderaBala==True:
+            if self.coordYBala>-1:
                 self.coordYBala-=self.velocidadDisparo
                 pantalla.blit(self.bala, (self.coordXBalaInicial, self.coordYBala)) 
-            else:
-                self.BanderaBala=False
-
             if self.coordYBala<0:
                 self.disparo=False
 
